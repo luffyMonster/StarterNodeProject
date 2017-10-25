@@ -6,7 +6,7 @@
 import * as http from 'http';
 import * as debug from 'debug';
 
-import app from '../App';
+import App from './App';
 
 debug('ts-express:server');
 
@@ -15,7 +15,8 @@ debug('ts-express:server');
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+const app = new App().express;
+const port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**

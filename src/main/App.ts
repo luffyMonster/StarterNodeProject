@@ -2,11 +2,10 @@ import * as express from 'express';
 import * as path from 'path';
 import * as favicon from 'serve-favicon';
 import * as logger from 'morgan';
-import * as cookieParser from 'cookie-parser');
+import * as cookieParser from 'cookie-parser';
 import * as bodyParser from'body-parser';
 import * as sassMiddleware from 'node-sass-middleware';
-import * as AppRouter from './routes';
-import AppRouter from "./routes/index";
+import AppRouter from "./routes/AppRouter";
 
 class App {
   public express : express.Application;
@@ -16,17 +15,18 @@ class App {
     this.view();
     this.middleware();
     this.routes();
+    this.error();
   }
 
   private view() : void{
-    app.set('views', path.join(__dirname, 'views'));
-    app.set('view engine', 'jade');
-    app.use(express.static(path.join(__dirname, 'public')));
+    this.express.set('views', path.join(__dirname, 'views'));
+    this.express.set('view engine', 'jade');
+    this.express.use(express.static(path.join(__dirname, 'public')));
   }
 
 
   private middleware() : void {
-    this.express.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+    // this.express.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
@@ -37,13 +37,19 @@ class App {
       indentedSyntax: true, // true = .sass and false = .scss
       sourceMap: true
     }));
+  }
 
 
-    //Error
+  private routes() : void {
+    this.express.use(new AppRouter().router);
+  }
+
+  private error() : void {
+    // Error
     // catch 404 and forward to error handler
     this.express.use(function(req, res, next) {
-      var err = new Error('Not Found');
-      err.status = 404;
+      let err : Error  = new Error('Not Found');
+      err['status'] = 404;
       next(err);
     });
 
@@ -59,14 +65,7 @@ class App {
     });
   }
 
-
-  private routes() : void {
-    let router = new AppRouter();
-    app.use('/', router.index());
-    app.use('/users', router.users());
-  }
-
 }
 
-export default new App().express;
+export default App;
 
