@@ -47,11 +47,11 @@ class App {
   private error() : void {
     // Error
     // catch 404 and forward to error handler
-    this.express.use(function(req, res, next) {
-      let err : Error  = new Error('Not Found');
-      err['status'] = 404;
-      next(err);
-    });
+    // this.express.use(function(req, res, next) {
+    //   let err : Error  = new Error('Not Found');
+    //   err['status'] = 104;
+    //   next(err);
+    // });
 
     // error handler
     this.express.use(function(err, req, res, next) {

@@ -10,7 +10,8 @@ gulp.task("scripts", ()=>{
     gulp.src(["src/main/views/**/*"]).pipe(gulp.dest("dist/main/views"));
     gulp.src(["src/main/public/**/*"]).pipe(gulp.dest("dist/main/public"));
     const tsResult = tsProject.src().pipe(tsProject());
-    return tsResult.js.pipe(gulp.dest("dist"));
+    tsResult.js.pipe(gulp.dest("dist"));
+    gulp.src(["dist/main/index.js"]).pipe(rename("www")).pipe(gulp.dest("dist/main"));
 });
 
 gulp.task("watch", ["scripts"], ()=>{
